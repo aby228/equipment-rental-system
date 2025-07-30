@@ -19,7 +19,8 @@
       "db:reset": "npx prisma db push --force-reset",
       "db:push": "npx prisma db push",
       "db:seed": "npx prisma db seed",
-      "db:studio": "npx prisma studio"
+      "db:studio": "npx prisma studio",
+      "vercel-build": "prisma generate && next build"
    },
    "dependencies": {
       "@hookform/resolvers": "^3.9.0",

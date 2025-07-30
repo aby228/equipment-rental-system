@@ -1,0 +1,39 @@
+# Backend files (not needed for frontend deployment)
+backend/
+node_modules/
+*.log
+
+# Development files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build artifacts
+.next/
+out/
+dist/
+
+# Database files
+*.sqlite
+*.db
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git files
+.git/
+.gitignore
+
+# Documentation (optional)
+README.md
+SECURITY.md
+GITHUB_SETUP.md
+DEPLOYMENT_CHECKLIST.md
+LICENSE 

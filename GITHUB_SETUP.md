@@ -49,7 +49,7 @@ git commit -m "feat: initial commit - equipment rental platform
 gh auth login
 
 # Create repository
-gh repo create equipment-rental-platform \
+gh repo create equipment-rental-system \
   --public \
   --description "A comprehensive full-stack equipment rental management system built with Next.js, Express.js, and PostgreSQL" \
   --homepage "https://github.com/yourusername/equipment-rental-platform" \
