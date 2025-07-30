@@ -28,5 +28,6 @@ export const verifyJWT = async <T>(token: string): Promise<T> => {
       ).payload as T
    } catch (error) {
       console.error({ error })
+      throw new Error('Invalid JWT token')
    }
 }

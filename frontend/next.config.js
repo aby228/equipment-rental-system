@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 
-module.exports = {
+const nextConfig = {
     images: {
         remotePatterns: [
             {
@@ -8,6 +8,7 @@ module.exports = {
                 hostname: '**',
             },
         ],
+        unoptimized: true, // For Vercel deployment
     },
     async redirects() {
         return [
@@ -18,4 +19,12 @@ module.exports = {
             },
         ]
     },
+    // Enable experimental features for better performance
+    experimental: {
+        serverComponentsExternalPackages: ['@prisma/client'],
+    },
+    // Ensure proper output for Vercel
+    output: 'standalone',
 }
+
+module.exports = nextConfig

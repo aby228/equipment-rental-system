@@ -10,10 +10,21 @@ import {
 import Image from 'next/image'
 import Link from 'next/link'
 
-export function BlogPostGrid({ blogs }) {
+interface BlogPost {
+  slug: string;
+  title: string;
+  description: string;
+  image: string;
+  createdAt: Date;
+  author?: {
+    name: string;
+  };
+}
+
+export function BlogPostGrid({ blogs }: { blogs: BlogPost[] }) {
    return (
       <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-         {blogs.map((post: any) => (
+         {blogs.map((post: BlogPost) => (
             <BlogPostCard key={post.slug} post={post} />
          ))}
       </div>
@@ -30,7 +41,7 @@ export function BlogPostSkeletonGrid() {
    )
 }
 
-export function BlogPostCard({ post }) {
+export function BlogPostCard({ post }: { post: BlogPost }) {
    const { title, description, image, slug, createdAt, author } = post
 
    return (

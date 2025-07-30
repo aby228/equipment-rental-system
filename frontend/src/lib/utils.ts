@@ -20,11 +20,11 @@ export function absoluteUrl(path: string) {
    return `${process.env.NEXT_PUBLIC_APP_URL}${path}`
 }
 
-export function isVariableValid(variable) {
+export function isVariableValid(variable: unknown): boolean {
    return variable !== null && variable !== undefined
 }
 
-export function validateBoolean(variable, value) {
+export function validateBoolean(variable: unknown, value: unknown): boolean {
    if (isVariableValid(variable) && variable === value) {
       return true
    }
