@@ -101,22 +101,22 @@
    ```
 
 2. **Create Database**:
-   ```sql
-   CREATE DATABASE rentals_db;
+```sql
+CREATE DATABASE rentals_db;
    CREATE USER rental_user WITH PASSWORD 'your_secure_password';
    GRANT ALL PRIVILEGES ON DATABASE rentals_db TO rental_user;
-   ```
+```
 
 3. **Initialize Database Schema**:
    ```bash
    # Using the provided SQL script
-   psql -d rentals_db -f backend/database.sql
+psql -d rentals_db -f backend/database.sql
    
    # Or using Prisma (recommended)
    cd frontend
    npx prisma generate
    npx prisma db push
-   ```
+```
 
 ### ⚙️ Environment Configuration
 
@@ -167,7 +167,7 @@ NEXT_PUBLIC_GA_ID=your_google_analytics_id
 ### 📦 Installation & Setup
 
 1. **Clone the Repository**:
-   ```bash
+```bash
    git clone https://github.com/yourusername/equipment-rental-platform.git
    cd equipment-rental-platform
    ```
@@ -178,21 +178,21 @@ NEXT_PUBLIC_GA_ID=your_google_analytics_id
    npm run install:all
    
    # Or install individually:
-   npm install
+npm install
    cd backend && npm install
    cd ../frontend && npm install
-   ```
+```
 
 3. **Database Setup**:
    ```bash
    # Generate Prisma client and push schema
    npm run setup:db
-   
+
    # Or manually:
-   cd frontend
-   npx prisma generate
-   npx prisma db push
-   ```
+cd frontend
+npx prisma generate
+npx prisma db push
+```
 
 ### 🚀 Running the Application
 
@@ -539,7 +539,7 @@ npm install
 
 **Solutions**:
 - Ensure `JWT_SECRET` matches in both backend and frontend
-- Use strong secrets (minimum 32 characters)
+   - Use strong secrets (minimum 32 characters)
 - Check token expiration settings
 
 #### 5. Build Errors
