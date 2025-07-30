@@ -1,0 +1,53 @@
+{
+  "name": "equipment-rental-system",
+  "version": "1.0.0",
+  "description": "A comprehensive full-stack equipment rental management system built with Next.js, Express.js, and PostgreSQL. Features user authentication, equipment management, rental tracking, and order processing with modern UI/UX.",
+  "main": "index.js",
+  "scripts": {
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "build": "cd frontend && npm run build",
+    "start": "cd backend && npm start",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "setup:db": "cd frontend && npx prisma generate && npx prisma db push",
+    "lint": "cd frontend && npm run lint",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "equipment-rental",
+    "full-stack",
+    "nextjs",
+    "express",
+    "postgresql",
+    "prisma",
+    "typescript",
+    "tailwindcss",
+    "jwt-authentication",
+    "rental-management",
+    "ecommerce",
+    "react",
+    "nodejs"
+  ],
+  "author": {
+    "name": "EDUSTECH Enterprise",
+    "email": "youngeabraham89@gmail.com",
+    "url": "https://github.com/aby228"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aby228/equipment-rental-system.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aby228/equipment-rental-system/issues"
+  },
+  "homepage": "https://github.com/aby228/equipment-rental-system#readme",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
