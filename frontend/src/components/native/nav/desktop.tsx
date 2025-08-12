@@ -12,24 +12,89 @@ import {
 import config from '@/config/site'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
+import Image from 'next/image'
 import { forwardRef } from 'react'
 
-const components: { title: string; href: string; description: string }[] = [
+const equipmentCategories: { title: string; href: string; description: string }[] = [
    {
-      title: 'Alert Dialog',
-      href: '/docs/primitives/alert-dialog',
-      description:
-         'A modal dialog that interrupts the user with important content and expects a response.',
+      title: 'Power Equipment',
+      href: '/products?category=Power Equipment',
+      description: 'Generators, welders, and electrical equipment for construction sites.',
+   },
+   {
+      title: 'Concrete Equipment',
+      href: '/products?category=Concrete Equipment',
+      description: 'Mixers, pumps, and tools for concrete and masonry work.',
+   },
+   {
+      title: 'Access Equipment',
+      href: '/products?category=Access Equipment',
+      description: 'Scissor lifts, aerial lifts, and scaffolding systems.',
+   },
+   {
+      title: 'Tools & Hand Tools',
+      href: '/products?category=Tools',
+      description: 'Professional tools and hand tools for construction projects.',
+   },
+   {
+      title: 'Material Handling',
+      href: '/products?category=Material Handling',
+      description: 'Wheelbarrows and material transport equipment.',
+   },
+   {
+      title: 'Pumps',
+      href: '/products?category=Pumps',
+      description: 'Water pumps, sewage pumps, and drainage equipment.',
+   },
+]
+
+const equipmentBrands: { title: string; href: string; description: string }[] = [
+   {
+      title: 'AMT',
+      href: '/products?brand=AMT',
+      description: 'Professional pumps and water equipment.',
+   },
+   {
+      title: 'Cummins',
+      href: '/products?brand=Cummins',
+      description: 'Industrial-grade diesel generators and power equipment.',
+   },
+   {
+      title: 'WL',
+      href: '/products?brand=WL',
+      description: 'Portable generators and power solutions.',
+   },
+   {
+      title: 'Professional',
+      href: '/products?brand=Professional',
+      description: 'Professional-grade construction tools and equipment.',
+   },
+   {
+      title: 'Heavy-Duty',
+      href: '/products?brand=Heavy-Duty',
+      description: 'Heavy-duty equipment for demanding construction projects.',
    },
 ]
 
 export function MainNav() {
    return (
       <div className="hidden md:flex gap-4">
-         <Link href="/" className="flex items-center">
-            <span className="hidden font-medium sm:inline-block">
-               {config.name}
-            </span>
+         <Link href="/" className="flex items-center space-x-2">
+            <Image
+               src="/logo.png"
+               alt="EDUSTECH ENTERPRISE Logo"
+               width={32}
+               height={32}
+               className="rounded-md"
+            />
+            <div className="flex flex-col">
+               <span className="hidden font-medium sm:inline-block">
+                  {config.name}
+               </span>
+               <span className="hidden text-xs text-muted-foreground sm:inline-block">
+                  {config.subtitle}
+               </span>
+            </div>
          </Link>
          <NavMenu />
       </div>
@@ -44,7 +109,7 @@ export function NavMenu() {
                <Link href="/products" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                      <div className="font-normal text-foreground/70">
-                        Products
+                        Equipment
                      </div>
                   </NavigationMenuLink>
                </Link>
@@ -61,31 +126,23 @@ export function NavMenu() {
                         <NavigationMenuLink asChild>
                            <Link
                               className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                              href="/"
+                              href="/products"
                            >
                               <div className="mb-2 mt-4 text-lg font-medium">
-                                 shadcn/ui
+                                 {config.name}
                               </div>
                               <p className="text-sm leading-tight text-muted-foreground">
-                                 Beautifully designed components built with
-                                 Radix UI and Tailwind CSS.
+                                 Professional construction equipment available for hourly rental. 
+                                 Browse our complete inventory of tools, machinery, and accessories.
                               </p>
                            </Link>
                         </NavigationMenuLink>
                      </li>
-                     <ListItem href="/docs" title="Introduction">
-                        Re-usable components built using Radix UI and Tailwind
-                        CSS.
-                     </ListItem>
-                     <ListItem href="/docs/installation" title="Installation">
-                        How to install dependencies and structure your app.
-                     </ListItem>
-                     <ListItem
-                        href="/docs/primitives/typography"
-                        title="Typography"
-                     >
-                        Styles for headings, paragraphs, lists...etc
-                     </ListItem>
+                     {equipmentCategories.map((category) => (
+                        <ListItem key={category.title} href={category.href} title={category.title}>
+                           {category.description}
+                        </ListItem>
+                     ))}
                   </ul>
                </NavigationMenuContent>
             </NavigationMenuItem>
@@ -95,13 +152,13 @@ export function NavMenu() {
                </NavigationMenuTrigger>
                <NavigationMenuContent>
                   <ul className="grid w-[400px] gap-2 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
-                     {components.map((component) => (
+                     {equipmentBrands.map((brand) => (
                         <ListItem
-                           key={component.title}
-                           title={component.title}
-                           href={component.href}
+                           key={brand.title}
+                           title={brand.title}
+                           href={brand.href}
                         >
-                           {component.description}
+                           {brand.description}
                         </ListItem>
                      ))}
                   </ul>
@@ -120,7 +177,7 @@ const ListItem = forwardRef<
       <li>
          <NavigationMenuLink asChild>
             <Link
-               href={href}
+               href={href || '#'}
                ref={ref}
                className={cn(
                   'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',

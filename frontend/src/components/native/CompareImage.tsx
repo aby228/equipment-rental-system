@@ -66,7 +66,7 @@ const CompareImage: React.FC<IProps> = (props) => {
 
     // 0 to 1
     const [sliderPosition, setSliderPosition] = useState<number>(
-        sliderPositionPercentage
+        sliderPositionPercentage || 0.5
     )
     const [containerWidth, setContainerWidth] = useState<number>(0)
     const [containerHeight, setContainerHeight] = useState<number>(0)
@@ -74,9 +74,9 @@ const CompareImage: React.FC<IProps> = (props) => {
     const [rightImgLoaded, setRightImgLoaded] = useState<boolean>(false)
     const [isSliding, setIsSliding] = useState<boolean>(false)
 
-    const containerRef = useRef(null)
-    const rightImageRef = useRef(null)
-    const leftImageRef = useRef(null)
+    const containerRef = useRef<HTMLDivElement>(null)
+    const rightImageRef = useRef<HTMLImageElement>(null)
+    const leftImageRef = useRef<HTMLImageElement>(null)
 
     // make the component responsive
     useEffect(() => {
@@ -86,7 +86,9 @@ const CompareImage: React.FC<IProps> = (props) => {
                 entry.target.getBoundingClientRect().width
             setContainerWidth(currentContainerWidth)
         })
-        resizeObserver.observe(containerElement)
+        if (containerElement) {
+            resizeObserver.observe(containerElement)
+        }
 
         return () => resizeObserver.disconnect()
     }, [])
@@ -94,7 +96,7 @@ const CompareImage: React.FC<IProps> = (props) => {
     useEffect(() => {
         // consider the case where loading image is completed immediately
         // due to the cache etc.
-        const alreadyDone = leftImageRef.current.complete
+        const alreadyDone = leftImageRef.current?.complete
         alreadyDone && setLeftImgLoaded(true)
 
         return () => {
@@ -106,7 +108,7 @@ const CompareImage: React.FC<IProps> = (props) => {
     useEffect(() => {
         // consider the case where loading image is completed immediately
         // due to the cache etc.
-        const alreadyDone = rightImageRef.current.complete
+        const alreadyDone = rightImageRef.current?.complete
         alreadyDone && setRightImgLoaded(true)
 
         return () => {
@@ -118,14 +120,14 @@ const CompareImage: React.FC<IProps> = (props) => {
     const allImagesLoaded = rightImgLoaded && leftImgLoaded
 
     useEffect(() => {
-        const handleSliding = (event) => {
+        const handleSliding = (event: MouseEvent | TouchEvent) => {
             const e = event || window.event
 
             // Calc cursor position from the:
             // - left edge of the viewport (for horizontal)
             // - top edge of the viewport (for vertical)
-            const cursorXfromViewport = e.touches ? e.touches[0].pageX : e.pageX
-            const cursorYfromViewport = e.touches ? e.touches[0].pageY : e.pageY
+            const cursorXfromViewport = 'touches' in e ? e.touches[0].pageX : e.pageX
+            const cursorYfromViewport = 'touches' in e ? e.touches[0].pageY : e.pageY
 
             // Calc Cursor Position from the:
             // - left edge of the window (for horizontal)
@@ -137,16 +139,18 @@ const CompareImage: React.FC<IProps> = (props) => {
             // Calc Cursor Position from the:
             // - left edge of the image(for horizontal)
             // - top edge of the image(for vertical)
-            const imagePosition = rightImageRef.current.getBoundingClientRect()
+            const imagePosition = rightImageRef.current?.getBoundingClientRect()
+            if (!imagePosition) return
+            
             let pos = horizontal
                 ? cursorXfromWindow - imagePosition.left
                 : cursorYfromWindow - imagePosition.top
 
             // Set minimum and maximum values to prevent the slider from overflowing
-            const minPos = 0 + sliderLineWidth / 2
+            const minPos = 0 + (sliderLineWidth || 2) / 2
             const maxPos = horizontal
-                ? containerWidth - sliderLineWidth / 2
-                : containerHeight - sliderLineWidth / 2
+                ? containerWidth - (sliderLineWidth || 2) / 2
+                : containerHeight - (sliderLineWidth || 2) / 2
 
             if (pos < minPos) pos = minPos
             if (pos > maxPos) pos = maxPos
@@ -163,7 +167,7 @@ const CompareImage: React.FC<IProps> = (props) => {
             }
         }
 
-        const startSliding = (e) => {
+        const startSliding = (e: MouseEvent | TouchEvent) => {
             setIsSliding(true)
 
             // Prevent default behavior other than mobile scrolling
@@ -190,25 +194,26 @@ const CompareImage: React.FC<IProps> = (props) => {
             // it's necessary to reset event handlers each time the canvasWidth changes
 
             // for mobile
-            containerElement.addEventListener('touchstart', startSliding) // 01
+            if (containerElement) {
+                containerElement.addEventListener('touchstart', startSliding) // 01
+            }
             window.addEventListener('touchend', finishSliding) // 02
 
             // for desktop
-            if (hover) {
-                containerElement.addEventListener('mousemove', handleSliding) // 03
-                containerElement.addEventListener('mouseleave', finishSliding) // 04
-            } else {
-                containerElement.addEventListener('mousedown', startSliding) // 05
-                window.addEventListener('mouseup', finishSliding) // 06
+            if (containerElement) {
+                containerElement.addEventListener('mousedown', startSliding) // 03
             }
+            window.addEventListener('mouseup', finishSliding) // 04
 
             // calc and set the container's size
             const leftImageWidthHeightRatio =
-                leftImageRef.current.naturalHeight /
-                leftImageRef.current.naturalWidth
+                leftImageRef.current?.naturalHeight && leftImageRef.current?.naturalWidth
+                    ? leftImageRef.current.naturalHeight / leftImageRef.current.naturalWidth
+                    : 1
             const rightImageWidthHeightRatio =
-                rightImageRef.current.naturalHeight /
-                rightImageRef.current.naturalWidth
+                rightImageRef.current?.naturalHeight && rightImageRef.current?.naturalWidth
+                    ? rightImageRef.current.naturalHeight / rightImageRef.current.naturalWidth
+                    : 1
 
             const idealWidthHeightRatio =
                 aspectRatio === 'taller'
@@ -228,11 +233,13 @@ const CompareImage: React.FC<IProps> = (props) => {
 
         return () => {
             // cleanup all event resteners
-            containerElement.removeEventListener('touchstart', startSliding) // 01
+            if (containerElement) {
+                containerElement.removeEventListener('touchstart', startSliding) // 01
+                containerElement.removeEventListener('mousemove', handleSliding) // 03
+                containerElement.removeEventListener('mouseleave', finishSliding) // 04
+                containerElement.removeEventListener('mousedown', startSliding) // 05
+            }
             window.removeEventListener('touchend', finishSliding) // 02
-            containerElement.removeEventListener('mousemove', handleSliding) // 03
-            containerElement.removeEventListener('mouseleave', finishSliding) // 04
-            containerElement.removeEventListener('mousedown', startSliding) // 05
             window.removeEventListener('mouseup', finishSliding) // 06
             window.removeEventListener('mousemove', handleSliding) // 07
             window.removeEventListener('touchmove', handleSliding) // 08
@@ -284,21 +291,23 @@ const CompareImage: React.FC<IProps> = (props) => {
         },
         slider: {
             alignItems: 'center',
-            cursor:
-                (!hover && horizontal && 'ew-resize') ||
-                (!hover && !horizontal && 'ns-resize'),
+            cursor: (() => {
+                if (!hover && horizontal) return 'ew-resize'
+                if (!hover && !horizontal) return 'ns-resize'
+                return undefined
+            })(),
             display: 'flex',
             flexDirection: horizontal ? 'column' : 'row',
             height: horizontal ? '100%' : `${handleSize}px`,
             justifyContent: 'center',
             left: horizontal
-                ? `${containerWidth * sliderPosition - handleSize / 2}px`
+                ? `${containerWidth * sliderPosition - (handleSize || 40) / 2}px`
                 : 0,
             position: 'absolute',
             top: horizontal
                 ? 0
-                : `${containerHeight * sliderPosition - handleSize / 2}px`,
-            width: horizontal ? `${handleSize}px` : '100%',
+                : `${containerHeight * sliderPosition - (handleSize || 40) / 2}px`,
+            width: horizontal ? `${handleSize || 40}px` : '100%',
         },
         line: {
             background: sliderLineColor,
@@ -332,18 +341,18 @@ const CompareImage: React.FC<IProps> = (props) => {
             transform: horizontal ? 'none' : 'rotate(90deg)',
         },
         leftArrow: {
-            border: `inset ${handleSize * 0.15}px rgba(0,0,0,0)`,
-            borderRight: `${handleSize * 0.15}px solid ${sliderLineColor}`,
+            border: `inset ${(handleSize || 40) * 0.15}px rgba(0,0,0,0)`,
+            borderRight: `${(handleSize || 40) * 0.15}px solid ${sliderLineColor}`,
             height: '0px',
-            marginLeft: `-${handleSize * 0.25}px`, // for IE11
-            marginRight: `${handleSize * 0.25}px`,
+            marginLeft: `-${(handleSize || 40) * 0.25}px`, // for IE11
+            marginRight: `${(handleSize || 40) * 0.25}px`,
             width: '0px',
         },
         rightArrow: {
-            border: `inset ${handleSize * 0.15}px rgba(0,0,0,0)`,
-            borderLeft: `${handleSize * 0.15}px solid ${sliderLineColor}`,
+            border: `inset ${(handleSize || 40) * 0.15}px rgba(0,0,0,0)`,
+            borderLeft: `${(handleSize || 40) * 0.15}px solid ${sliderLineColor}`,
             height: '0px',
-            marginRight: `-${handleSize * 0.25}px`, // for IE11
+            marginRight: `-${(handleSize || 40) * 0.25}px`, // for IE11
             width: '0px',
         },
         leftLabel: {
@@ -363,10 +372,10 @@ const CompareImage: React.FC<IProps> = (props) => {
             opacity: isSliding ? 0 : 1,
             padding: '10px 20px',
             position: 'absolute',
-            left: horizontal ? null : '50%',
-            right: horizontal ? '5%' : null,
-            top: horizontal ? '50%' : null,
-            bottom: horizontal ? null : '3%',
+            left: horizontal ? undefined : '50%',
+            right: horizontal ? '5%' : undefined,
+            top: horizontal ? '50%' : undefined,
+            bottom: horizontal ? undefined : '3%',
             transform: horizontal ? 'translate(0,-50%)' : 'translate(-50%, 0)',
             transition: 'opacity 0.1s ease-out',
         },

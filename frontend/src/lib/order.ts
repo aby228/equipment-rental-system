@@ -1,7 +1,17 @@
-export function calculateDiscountAmount(
+interface DiscountObject {
+   maxAmount: number;
+   percentage: number;
+}
+
+interface DiscountObjectWithUses extends DiscountObject {
+   maxUses: number;
+   burntUses: number;
+}
+
+export function calculateDiscount(
    isDiscounted: boolean,
    totalAmount: number,
-   discountObject
+   discountObject: DiscountObjectWithUses | null
 ) {
    if (isDiscounted && discountObject && isDiscountAcceptable(discountObject)) {
       const { maxAmount, percentage } = discountObject
@@ -38,12 +48,12 @@ export function calculatePayableAmount(
    isDiscounted: boolean,
    isReferred: boolean,
    totalAmount: number,
-   discountObject
+   discountObject: DiscountObjectWithUses | null
 ) {
    let payableAmount = totalAmount
 
    if (isDiscounted && discountObject) {
-      payableAmount -= calculateDiscountAmount(
+      payableAmount -= calculateDiscount(
          isDiscounted,
          totalAmount,
          discountObject
@@ -57,7 +67,7 @@ export function calculatePayableAmount(
    return payableAmount
 }
 
-export function isDiscountAcceptable(discountObject) {
+export function isDiscountAcceptable(discountObject: DiscountObjectWithUses) {
    const { maxUses, burntUses } = discountObject
 
    return maxUses > burntUses

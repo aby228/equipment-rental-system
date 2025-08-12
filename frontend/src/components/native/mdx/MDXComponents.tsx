@@ -4,7 +4,12 @@ import Step from '@/components/native/mdx/Step'
 import Image from 'next/image'
 import Link from 'next/link'
 
-function MDXImage({ alt, src }) {
+interface MDXImageProps {
+   alt: string;
+   src: string;
+}
+
+function MDXImage({ alt, src }: MDXImageProps) {
    return (
       <div className="my-6 w-full">
          <Image
@@ -18,7 +23,12 @@ function MDXImage({ alt, src }) {
    )
 }
 
-function Callout(props) {
+interface CalloutProps {
+   emoji: string;
+   children: React.ReactNode;
+}
+
+function Callout(props: CalloutProps) {
    return (
       <div className="my-8 flex rounded-lg bg-neutral-200 p-4 dark:bg-neutral-800">
          <div className="mr-4 flex w-4 items-center">{props.emoji}</div>
@@ -27,7 +37,11 @@ function Callout(props) {
    )
 }
 
-function Header({ title }) {
+interface HeaderProps {
+   title: string;
+}
+
+function Header({ title }: HeaderProps) {
    return <>HEY</>
 }
 

@@ -1,6 +1,11 @@
 import { CheckSquareIcon } from 'lucide-react'
 
-export default function ProsCard({ title, pros }) {
+interface ProsCardProps {
+   title: string;
+   pros: string[];
+}
+
+export default function ProsCard({ title, pros }: ProsCardProps) {
    return (
       <div className="my-4 w-full rounded-xl border border-green-200 bg-green-50 p-6 dark:border-green-900 dark:bg-green-900">
          <span>{`You might use ${title} if...`}</span>

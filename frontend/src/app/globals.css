@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -106,34 +107,41 @@
       --chart-5:
          340 75% 55%;
    }
-}
 
-@layer base {
    * {
       @apply border-border;
    }
+
    body {
       @apply bg-background text-foreground;
-      font-feature-settings:
-         'rlig' 1,
-         'calt' 1;
+      font-family: 'Poppins', sans-serif;
+      font-feature-settings: 'rlig' 1, 'calt' 1;
    }
-}
 
-@layer utilities {
+   h1, h2, h3, h4, h5, h6 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+   }
+
+   .font-display {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+   }
+
    .step {
       counter-increment: step;
    }
 
    .step:before {
-      @apply absolute w-9 h-9 bg-muted rounded-full font-mono font-medium text-center text-base inline-flex items-center justify-center -indent-px border-4 border-background;
-      @apply ml-[-50px] mt-[-4px];
+      @apply absolute w-8 h-8 rounded-full bg-muted border-4 border-background text-center text-sm font-medium leading-8 -left-4;
       content: counter(step);
    }
-}
 
-@media (max-width: 640px) {
-   .container {
-      @apply px-4;
+   @media (max-width: 640px) {
+      .container {
+         @apply px-4;
+      }
    }
 }

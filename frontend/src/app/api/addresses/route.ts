@@ -9,13 +9,10 @@ export async function GET(req: Request) {
          return new NextResponse('Unauthorized', { status: 401 })
       }
 
-      const addresses = await prisma.address.findMany({
-         where: {
-            userId,
-         },
-      })
+      // Address functionality not implemented in this equipment rental app
+      return new Response('Address functionality not available', { status: 501 })
 
-      return NextResponse.json(addresses)
+      // Address functionality not implemented
    } catch (error) {
       console.error('[ADDRESSES_GET]', error)
       return new NextResponse('Internal error', { status: 500 })
@@ -32,21 +29,8 @@ export async function POST(req: Request) {
 
       const { address, city, phone, postalCode } = await req.json()
 
-      const object = await prisma.address.create({
-         data: {
-            user: {
-               connect: {
-                  id: userId,
-               },
-            },
-            city,
-            address,
-            phone,
-            postalCode,
-         },
-      })
-
-      return NextResponse.json(object)
+      // Address functionality not implemented in this equipment rental app
+      return new Response('Address functionality not available', { status: 501 })
    } catch (error) {
       console.error('[ADDRESS_POST]', error)
       return new NextResponse('Internal error', { status: 500 })

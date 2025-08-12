@@ -1,17 +1,19 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { CommandMenu } from '@/components/composites/command'
 import { MobileNav } from '@/components/native//nav/mobile'
 import { UserNav } from '@/components/native//nav/user'
 import { MainNav } from '@/components/native/nav/desktop'
 import { Button } from '@/components/ui/button'
-import { useAuthenticated } from '@/hooks/useAuthentication'
-import { LogInIcon, MoonIcon, ShoppingBasketIcon, SunIcon } from 'lucide-react'
+import { LogInIcon, MoonIcon, ShoppingBasketIcon, SunIcon, User } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function Header() {
-   const { authenticated } = useAuthenticated()
+   const { authenticated, user } = useAuthenticated()
+   const router = useRouter()
 
    return (
       <header className="supports-backdrop-blur:bg-background/90 sticky top-0 z-50 w-full border-b bg-background/90 backdrop-blur mb-4 px-[1.4rem] md:px-[4rem] lg:px-[6rem] xl:px-[8rem] 2xl:px-[12rem]">
@@ -24,7 +26,7 @@ export default function Header() {
                </div>
                <CartNav />
                <ThemeToggle />
-               {authenticated ? <UserNav /> : <LoginDialog />}
+               {authenticated ? <UserNav user={user} /> : <LoginDialog />}
             </div>
          </div>
       </header>
@@ -68,4 +70,23 @@ function ThemeToggle() {
          )}
       </Button>
    )
+}
+
+// Custom hook for authentication
+function useAuthenticated() {
+   const [authenticated, setAuthenticated] = useState(false)
+   const [user, setUser] = useState(null)
+
+   useEffect(() => {
+      const userData = localStorage.getItem('user')
+      if (userData) {
+         setAuthenticated(true)
+         setUser(JSON.parse(userData))
+      } else {
+         setAuthenticated(false)
+         setUser(null)
+      }
+   }, [])
+
+   return { authenticated, user }
 }

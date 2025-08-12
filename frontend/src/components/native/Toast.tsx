@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react'
 import { DeleteIcon } from 'lucide-react'
 
-export default function Toast({ message }) {
+interface ToastProps {
+   message: string;
+}
+
+export default function Toast({ message }: ToastProps) {
    const [toastVisibility, setToastVisibility] = useState(false)
 
    useEffect(() => {
@@ -30,4 +34,6 @@ export default function Toast({ message }) {
             </button>
          </div>
       )
+   
+   return null
 }

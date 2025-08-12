@@ -1,64 +1,44 @@
 import { Prisma } from '@prisma/client'
 
-export type CartItemWithProduct = Prisma.CartItemGetPayload<{
+export type OrderItemWithEquipment = Prisma.OrderItemGetPayload<{
    include: {
-      product: {
-         include: {
-            brand: true
-            categories: true
-         }
-      }
-   }
+      equipment: true;
+   };
 }>
 
-export type ProductWithIncludes = Prisma.ProductGetPayload<{
+export type EquipmentWithIncludes = Prisma.EquipmentGetPayload<{
    include: {
-      brand: true
-      categories: true
-   }
+      // No includes needed since Equipment is a simple model
+   };
 }>
 
-export type UserWithIncludes = Prisma.UserGetPayload<{
+export type CustomerWithIncludes = Prisma.CustomerGetPayload<{
    include: {
-      addresses: true
       orders: {
          include: {
             orderItems: {
                include: {
-                  product: true
+                  equipment: true
                }
             }
          }
       }
+      rentals: true
    }
 }>
 
 export type OrderWithIncludes = Prisma.OrderGetPayload<{
    include: {
-      address: true
-      discountCode: true
-      user: {
+      customer: {
          include: {
-            addresses: true
-            payments: true
             orders: true
-         }
-      }
-      payments: {
-         include: {
-            provider: true
+            rentals: true
          }
       }
       orderItems: {
          include: {
-            product: {
-               include: {
-                  brand: true
-                  categories: true
-               }
-            }
+            equipment: true
          }
       }
-      refund: true
    }
 }>

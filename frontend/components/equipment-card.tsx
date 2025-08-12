@@ -2,7 +2,15 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function EquipmentCard({ equipment }) {
+interface Equipment {
+  id: number;
+  name: string;
+  description: string | null;
+  dailyRate: number;
+  quantity: number;
+}
+
+export default function EquipmentCard({ equipment }: { equipment: Equipment }) {
   return (
     <Link href={`/equipment/${equipment.id}`}>
       <div className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">

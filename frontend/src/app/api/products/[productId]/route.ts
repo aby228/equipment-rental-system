@@ -10,11 +10,11 @@ export async function GET(
          return new NextResponse('Product id is required', { status: 400 })
       }
 
-      const product = await prisma.product.findUniqueOrThrow({
-         where: { id: params.productId },
+      const product = await prisma.equipment.findUniqueOrThrow({
+         where: { id: parseInt(params.productId) },
          include: {
-            categories: true,
-            brand: true,
+            // Equipment model doesn't have categories, brand, etc.
+            // Include only the fields that exist
          },
       })
 

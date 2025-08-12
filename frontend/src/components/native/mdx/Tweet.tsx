@@ -2,6 +2,28 @@ import { VerifiedAccount } from '@/components/native/icons'
 import { format } from 'date-fns'
 import Image from 'next/image'
 
+interface TweetProps {
+   text: string;
+   id: string;
+   author: {
+      name: string;
+      handle: string;
+      image: string;
+      verified?: boolean;
+   };
+   media?: {
+      type: string;
+      url: string;
+      alt: string;
+      media_key: string;
+      height: number;
+      width: number;
+   }[];
+   created_at: string;
+   public_metrics?: any;
+   referenced_tweets?: any[];
+}
+
 /**
  * Supports plain text, images, quote tweets.
  *
@@ -16,12 +38,12 @@ export default function Tweet({
    created_at,
    public_metrics,
    referenced_tweets,
-}) {
-   const authorUrl = `https://twitter.com/${author.username}`
+}: TweetProps) {
+   const authorUrl = `https://twitter.com/${author.handle}`
    const likeUrl = `https://twitter.com/intent/like?tweet_id=${id}`
    const retweetUrl = `https://twitter.com/intent/retweet?tweet_id=${id}`
    const replyUrl = `https://twitter.com/intent/tweet?in_reply_to=${id}`
-   const tweetUrl = `https://twitter.com/${author.username}/status/${id}`
+   const tweetUrl = `https://twitter.com/${author.handle}/status/${id}`
    const createdAt = new Date(created_at)
 
    const formattedText = text
@@ -40,10 +62,10 @@ export default function Tweet({
                rel="noreferrer"
             >
                <Image
-                  alt={author.username}
+                  alt={author.name}
                   height={48}
                   width={48}
-                  src={author.profile_image_url}
+                  src={author.image}
                   className="rounded-full"
                />
             </a>
@@ -62,9 +84,9 @@ export default function Tweet({
                </span>
                <span
                   className="!text-neutral-500"
-                  title={`@${author.username}`}
+                  title={`@${author.handle}`}
                >
-                  @{author.username}
+                  @{author.handle}
                </span>
             </a>
             <a

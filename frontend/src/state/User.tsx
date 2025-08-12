@@ -12,7 +12,7 @@ export const useUserContext = () => {
    return useContext(UserContext)
 }
 
-export const UserContextProvider = ({ children }) => {
+export const UserContextProvider = ({ children }: { children: React.ReactNode }) => {
    const { authenticated } = useAuthenticated()
 
    const [user, setUser] = useState(null)

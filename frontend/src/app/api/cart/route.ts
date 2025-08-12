@@ -9,23 +9,9 @@ export async function GET(req: Request) {
          return new NextResponse('Unauthorized', { status: 401 })
       }
 
-      const cart = await prisma.cart.findUniqueOrThrow({
-         where: { userId },
-         include: {
-            items: {
-               include: {
-                  product: {
-                     include: {
-                        brand: true,
-                        categories: true,
-                     },
-                  },
-               },
-            },
-         },
-      })
-
-      return NextResponse.json(cart)
+      // Cart functionality not implemented in this equipment rental app
+      // You may need to implement cart storage differently
+      return new Response('Cart functionality not available', { status: 501 })
    } catch (error) {
       console.error('[GET_CART]', error)
       return new NextResponse('Internal error', { status: 500 })
@@ -42,58 +28,11 @@ export async function POST(req: Request) {
 
       const { productId, count } = await req.json()
 
-      if (count < 1) {
-         await prisma.cartItem.delete({
-            where: { UniqueCartItem: { cartId: userId, productId } },
-         })
-      } else {
-         await prisma.cart.upsert({
-            where: {
-               userId,
-            },
-            create: {
-               user: {
-                  connect: {
-                     id: userId,
-                  },
-               },
-            },
-            update: {
-               items: {
-                  upsert: {
-                     where: {
-                        UniqueCartItem: {
-                           cartId: userId,
-                           productId,
-                        },
-                     },
-                     update: {
-                        count,
-                     },
-                     create: {
-                        productId,
-                        count,
-                     },
-                  },
-               },
-            },
-         })
-      }
-
-      const cart = await prisma.cart.findUniqueOrThrow({
-         where: {
-            userId,
-         },
-         include: {
-            items: {
-               include: {
-                  product: true,
-               },
-            },
-         },
-      })
-
-      return NextResponse.json(cart)
+      // Cart functionality not implemented in this equipment rental app
+      // You may need to implement cart storage differently
+      console.log('Cart update would be:', { userId, productId, count })
+      
+      return new Response('Cart functionality not available', { status: 501 })
    } catch (error) {
       console.error('[PRODUCT_DELETE]', error)
       return new NextResponse('Internal error', { status: 500 })

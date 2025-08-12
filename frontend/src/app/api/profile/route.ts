@@ -9,31 +9,21 @@ export async function GET(req: Request) {
          return new NextResponse('Unauthorized', { status: 401 })
       }
 
-      const user = await prisma.user.findUniqueOrThrow({
-         where: { id: userId, isEmailVerified: true },
+      const user = await prisma.customer.findUniqueOrThrow({
+         where: { id: parseInt(userId) },
          include: {
-            cart: {
-               include: {
-                  items: {
-                     include: {
-                        product: true,
-                     },
-                  },
-               },
-            },
-            addresses: true,
-            wishlist: true,
+            // Customer model doesn't have cart, addresses, etc.
+            // Include only the fields that exist
          },
       })
 
       return NextResponse.json({
-         phone: user.phone,
+         id: user.id,
          email: user.email,
          name: user.name,
-         birthday: user.birthday,
-         addresses: user.addresses,
-         wishlist: user.wishlist,
-         cart: user.cart,
+         phone: user.phone,
+         role: user.role,
+         // Note: birthday, addresses, wishlist, cart fields don't exist in Customer model
       })
    } catch (error) {
       console.error('[PROFILE_GET]', error)

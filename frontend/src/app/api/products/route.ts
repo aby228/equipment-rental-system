@@ -1,12 +1,12 @@
 import prisma from '@/lib/prisma'
 import { NextResponse } from 'next/server'
 
-export async function GET(req: Request) {
+export async function GET() {
    try {
-      const products = await prisma.product.findMany({
+      const products = await prisma.equipment.findMany({
          include: {
-            brand: true,
-            categories: true,
+            // Equipment model doesn't have brand, categories, etc.
+            // Include only the fields that exist
          },
       })
 

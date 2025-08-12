@@ -4,16 +4,15 @@ import { validateBoolean } from '@/lib/utils'
 import { useEffect, useState } from 'react'
 
 export function useAuthenticated() {
-   const [authenticated, setAuthenticated] = useState(null)
+   const [authenticated, setAuthenticated] = useState<boolean | null>(null)
 
    useEffect(() => {
       try {
          if (typeof window !== 'undefined' && window.localStorage) {
             const cookies = document.cookie.split(';')
-            const loggedInCookie =
-               cookies
-                  .find((cookie) => cookie.startsWith('logged-in'))
-                  .split('=')[1] === 'true'
+            const loggedInCookie = cookies
+               .find((cookie) => cookie.startsWith('logged-in'))
+               ?.split('=')[1] === 'true'
 
             setAuthenticated(loggedInCookie ?? false)
          }

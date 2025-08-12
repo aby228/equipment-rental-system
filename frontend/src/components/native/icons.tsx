@@ -29,7 +29,11 @@ export const VerifiedAccount = () => (
    </svg>
 )
 
-export const Checkbox = ({ colorCode }) => (
+interface CheckboxProps {
+   colorCode: string;
+}
+
+export const Checkbox = ({ colorCode }: CheckboxProps) => (
    <svg className={`h-5 ${colorCode}`} viewBox="0 0 24 24">
       <g
          fill="none"

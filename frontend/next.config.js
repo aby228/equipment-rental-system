@@ -10,21 +10,21 @@ const nextConfig = {
         ],
         unoptimized: true, // For Vercel deployment
     },
-    async redirects() {
-        return [
-            {
-                source: '/product',
-                destination: '/products',
-                permanent: true,
-            },
-        ]
-    },
+    // async redirects() {
+    //     return [
+    //         {
+    //             source: '/product',
+    //             destination: '/products',
+    //             permanent: true,
+    //         },
+    //     ]
+    // },
     // Enable experimental features for better performance
     experimental: {
         serverComponentsExternalPackages: ['@prisma/client'],
     },
     // Ensure proper output for Vercel
-    output: 'standalone',
+    // output: 'standalone',
 }
 
 module.exports = nextConfig

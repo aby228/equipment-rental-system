@@ -1,11 +1,22 @@
-export function writeLocalCart(items) {
-   window.localStorage.setItem('Cart', JSON.stringify(items))
+interface CartItem {
+   product: any;
+   productId: number;
+   count: number;
+}
+
+interface Cart {
+   items: CartItem[];
+}
+
+export function writeLocalCart(cart: Cart) {
+   window.localStorage.setItem('Cart', JSON.stringify(cart))
 }
 
 export function getLocalCart() {
    if (typeof window !== 'undefined' && window.localStorage) {
       try {
-         return JSON.parse(window.localStorage.getItem('Cart'))
+         const cartData = window.localStorage.getItem('Cart')
+         return cartData ? JSON.parse(cartData) : null
       } catch (error) {
          writeLocalCart({ items: [] })
          return { items: [] }
@@ -13,7 +24,12 @@ export function getLocalCart() {
    }
 }
 
-export function getCountInCart({ cartItems, productId }) {
+interface GetCountInCartParams {
+   cartItems: CartItem[];
+   productId: number;
+}
+
+export function getCountInCart({ cartItems, productId }: GetCountInCartParams) {
    try {
       for (let i = 0; i < cartItems.length; i++) {
          if (cartItems[i]?.productId === productId) {

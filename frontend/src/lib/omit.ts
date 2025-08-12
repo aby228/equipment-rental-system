@@ -1,9 +1,10 @@
-export function omitUser<User, Key extends keyof User>(
+export function omit<User extends Record<string, any>, Key extends keyof User>(
    user: User,
-   ...keys: Key[]
+   keys: Key[]
 ): Omit<User, Key> {
+   const result = { ...user }
    for (let key of keys) {
-      delete user['password']
+      delete result[key]
    }
-   return user
+   return result
 }

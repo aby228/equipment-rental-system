@@ -18,24 +18,16 @@ export async function GET(
 
       const order = await prisma.order.findUniqueOrThrow({
          where: {
-            userId,
-            id: params.orderId,
+            customerId: parseInt(userId),
+            id: parseInt(params.orderId),
          },
          include: {
-            address: true,
-            discountCode: true,
-            user: true,
-            payments: {
-               include: {
-                  provider: true,
-               },
-            },
+            customer: true,
             orderItems: {
                include: {
-                  product: { include: { brand: true, categories: true } },
+                  equipment: true,
                },
             },
-            refund: true,
          },
       })
 

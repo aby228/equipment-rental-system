@@ -16,14 +16,10 @@ export async function GET(
          return new NextResponse('addressId is required', { status: 400 })
       }
 
-      const address = await prisma.address.findUniqueOrThrow({
-         where: {
-            userId,
-            id: params.addressId,
-         },
-      })
+      // Address functionality not implemented in this equipment rental app
+      return new Response('Address functionality not available', { status: 501 })
 
-      return NextResponse.json(address)
+      // Address functionality not implemented
    } catch (error) {
       console.error('[ADDRESS_GET]', error)
       return new NextResponse('Internal error', { status: 500 })

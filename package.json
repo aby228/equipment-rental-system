@@ -1,49 +1,46 @@
 {
-  "name": "equipment-rental-system",
+  "name": "edustech-equipment-rental",
   "version": "1.0.0",
-  "description": "A comprehensive full-stack equipment rental management system built with Next.js, Express.js, and PostgreSQL. Features user authentication, equipment management, rental tracking, and order processing with modern UI/UX.",
+  "description": "EDUSTECH Equipment Rental Platform - A modern full-stack web application for construction equipment rental management. Built with Next.js frontend and Express.js backend, featuring user authentication, equipment catalog, shopping cart, and order processing.",
   "main": "index.js",
   "scripts": {
-    "dev:backend": "cd backend && npm run dev",
+    "dev:backend": "cd backend-express && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "build": "cd frontend && npm install && npm run build",
-    "start": "cd backend && npm start",
-    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
-    "setup:db": "cd frontend && npx prisma generate && npx prisma db push",
+    "build": "cd frontend && npm run build",
+    "start": "cd backend-express && npm start",
+    "install:all": "npm install && cd backend-express && npm install && cd ../frontend && npm install",
     "lint": "cd frontend && npm run lint",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "vercel-build": "cd frontend && npm install && npm run build"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "equipment-rental",
+    "construction",
     "full-stack",
     "nextjs",
     "express",
-    "postgresql",
-    "prisma",
-    "typescript",
-    "tailwindcss",
     "jwt-authentication",
     "rental-management",
     "ecommerce",
     "react",
-    "nodejs"
+    "nodejs",
+    "tailwindcss",
+    "api"
   ],
   "author": {
-    "name": "EDUSTECH Enterprise",
-    "email": "youngeabraham89@gmail.com",
-    "url": "https://github.com/aby228"
+    "name": "CS Senior Developer",
+    "email": "edustechenterprise@gmail.com",
+    "url": "https://github.com/your-username"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aby228/equipment-rental-system.git"
+    "url": "https://github.com/your-username/edustech-equipment-rental.git"
   },
   "bugs": {
-    "url": "https://github.com/aby228/equipment-rental-system/issues"
+    "url": "https://github.com/your-username/edustech-equipment-rental/issues"
   },
-  "homepage": "https://github.com/aby228/equipment-rental-system#readme",
+  "homepage": "https://github.com/your-username/edustech-equipment-rental#readme",
   "engines": {
     "node": ">=18.0.0",
     "npm": ">=8.0.0"
