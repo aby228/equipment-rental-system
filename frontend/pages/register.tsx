@@ -96,13 +96,16 @@ export default function RegisterPage() {
           const loginData = await loginResponse.json()
 
           if (loginData.success) {
-            // Use the login function from useAuth hook
-            login({
+            // Normalize user and persist via useAuth
+            const displayName = loginData.user.fullName || loginData.user.name || formData.fullName
+            const normalized = {
               id: loginData.user.id || '1',
-              name: loginData.user.name || formData.fullName,
+              name: displayName,
               email: loginData.user.email || formData.email,
-              avatar: loginData.user.avatar
-            })
+              avatar: loginData.user.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=random`,
+              phone: formData.phone,
+            }
+            login(normalized)
             // Redirect to profile page after successful auto-login
             router.push('/profile')
           } else {

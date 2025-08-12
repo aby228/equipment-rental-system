@@ -36,13 +36,16 @@ export default function LoginPage() {
       const data = await response.json()
 
       if (data.success) {
-        // Use the login function from useAuth hook
-        login({
+        // Normalize backend user { fullName, email, phone, ... }
+        const displayName = data.user.fullName || data.user.name || 'User'
+        const normalized = {
           id: data.user.id || '1',
-          name: data.user.name || 'User',
+          name: displayName,
           email: data.user.email || email,
-          avatar: data.user.avatar
-        })
+          avatar: data.user.avatar,
+          phone: data.user.phone,
+        }
+        login(normalized)
         router.push('/')
       } else {
         setError(data.error || 'Login failed')

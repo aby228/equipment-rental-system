@@ -1,6 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
+import { UserAvatar } from '@/components/ui/user-avatar'
 import {
    DropdownMenu,
    DropdownMenuContent,
@@ -43,16 +44,19 @@ export function UserNav({ user }: UserNavProps) {
    return (
       <DropdownMenu>
          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="h-9 px-3">
-               <UserIcon className="h-4 mr-2" />
+            <Button variant="outline" className="h-9 px-2 gap-2">
+               <UserAvatar user={{ name: user?.name || 'User', avatar: user?.avatar }} size="sm" />
                <span className="hidden sm:inline">{user?.name || 'User'}</span>
             </Button>
          </DropdownMenuTrigger>
          <DropdownMenuContent className="w-56" align="end" forceMount>
             <DropdownMenuLabel>
-               <div className="flex flex-col space-y-1">
-                  <p className="text-sm font-medium leading-none">{user?.name || 'User'}</p>
-                  <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
+               <div className="flex items-center gap-3">
+                  <UserAvatar user={{ name: user?.name || 'User', avatar: user?.avatar }} size="sm" />
+                  <div className="flex flex-col space-y-1">
+                     <p className="text-sm font-medium leading-none">{user?.name || 'User'}</p>
+                     <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
+                  </div>
                </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />

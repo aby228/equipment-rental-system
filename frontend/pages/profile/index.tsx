@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -35,10 +35,10 @@ interface UserProfile {
   id: string
   name: string
   email: string
-  phone: string
-  address: string
-  avatar: string
-  joinDate: string
+  phone?: string
+  address?: string
+  avatar?: string
+  joinDate?: string
 }
 
 interface Order {
@@ -55,18 +55,18 @@ export default function ProfilePage() {
   const [editForm, setEditForm] = useState<UserProfile | null>(null)
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const { logout } = useAuth()
+  const { user: authUser, logout, isLoggedIn } = useAuth()
 
-  // Mock user data
-  const user: UserProfile = {
-    id: '1',
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    phone: '+1 (555) 123-4567',
-    address: '123 Main St, City, State 12345',
-    avatar: '/images/avatars/user.jpg',
-    joinDate: '2024-01-15'
-  }
+  // Use authenticated user data (with safe fallbacks)
+  const user: UserProfile = useMemo(() => ({
+    id: authUser?.id || '1',
+    name: authUser?.name || 'User',
+    email: authUser?.email || 'user@example.com',
+    phone: authUser?.phone || '',
+    address: '',
+    avatar: authUser?.avatar,
+    joinDate: new Date().toISOString(),
+  }), [authUser])
 
   // Mock orders
   const orders: Order[] = [
@@ -99,7 +99,20 @@ export default function ProfilePage() {
   }
 
   const handleSave = () => {
-    // TODO: Implement save functionality
+    // Persist profile changes locally so navbar/avatar update immediately
+    const next = {
+      id: user.id,
+      name: editForm?.name || user.name,
+      email: editForm?.email || user.email,
+      phone: editForm?.phone || user.phone,
+      avatar: avatarPreview || user.avatar,
+      address: editForm?.address || user.address,
+      joinDate: user.joinDate,
+    }
+    try {
+      localStorage.setItem('user', JSON.stringify(next))
+      window.dispatchEvent(new CustomEvent('userLogin'))
+    } catch {}
     setIsEditing(false)
     setEditForm(null)
     setAvatarPreview(null)
@@ -150,6 +163,25 @@ export default function ProfilePage() {
   }
 
 
+
+  if (!isLoggedIn || !authUser) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="mx-auto max-w-2xl px-4 sm:px-6 lg:px-8">
+          <Card className="shadow-sm">
+            <CardContent className="p-8 text-center space-y-4">
+              <User className="mx-auto h-12 w-12 text-gray-400" />
+              <h2 className="text-xl font-semibold">You are not signed in</h2>
+              <p className="text-sm text-gray-600">Please log in to view and manage your profile.</p>
+              <Link href="/login">
+                <Button className="mt-2">Go to Login</Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -218,7 +250,7 @@ export default function ProfilePage() {
                   <p className="text-sm text-gray-600">{user.email}</p>
                   <div className="mt-2 flex items-center justify-center text-xs text-gray-500">
                     <Calendar className="w-3 h-3 mr-1" />
-                    Member since {new Date(user.joinDate).toLocaleDateString()}
+                    Member since {new Date(user.joinDate || new Date().toISOString()).toLocaleDateString()}
                   </div>
                 </div>
               </CardContent>
@@ -283,7 +315,7 @@ export default function ProfilePage() {
                         <Input
                           id="name"
                           value={editForm?.name || user.name}
-                          onChange={(e) => setEditForm(prev => prev ? { ...prev, name: e.target.value } : null)}
+                          onChange={(e) => setEditForm(prev => prev ? { ...prev, name: e.target.value } : { ...user, name: e.target.value })}
                           disabled={!isEditing}
                           className="bg-white"
                         />
@@ -297,7 +329,7 @@ export default function ProfilePage() {
                           id="email"
                           type="email"
                           value={editForm?.email || user.email}
-                          onChange={(e) => setEditForm(prev => prev ? { ...prev, email: e.target.value } : null)}
+                          onChange={(e) => setEditForm(prev => prev ? { ...prev, email: e.target.value } : { ...user, email: e.target.value })}
                           disabled={!isEditing}
                           className="bg-white"
                         />
@@ -309,8 +341,8 @@ export default function ProfilePage() {
                         </Label>
                         <Input
                           id="phone"
-                          value={editForm?.phone || user.phone}
-                          onChange={(e) => setEditForm(prev => prev ? { ...prev, phone: e.target.value } : null)}
+                          value={editForm?.phone || user.phone || ''}
+                          onChange={(e) => setEditForm(prev => prev ? { ...prev, phone: e.target.value } : { ...user, phone: e.target.value })}
                           disabled={!isEditing}
                           className="bg-white"
                         />
@@ -322,8 +354,8 @@ export default function ProfilePage() {
                         </Label>
                         <Input
                           id="address"
-                          value={editForm?.address || user.address}
-                          onChange={(e) => setEditForm(prev => prev ? { ...prev, address: e.target.value } : null)}
+                          value={editForm?.address || user.address || ''}
+                          onChange={(e) => setEditForm(prev => prev ? { ...prev, address: e.target.value } : { ...user, address: e.target.value })}
                           disabled={!isEditing}
                           className="bg-white"
                         />
