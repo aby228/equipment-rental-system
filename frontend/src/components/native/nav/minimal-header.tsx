@@ -4,10 +4,11 @@ import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { ShoppingCart, Search, User, LogOut, Settings, Package, Heart } from "lucide-react"
+import { ShoppingCart, Search, User, LogOut, Settings, Package, Heart, DollarSign } from "lucide-react"
 import { SearchAutocomplete } from "@/components/ui/search-autocomplete"
 import { UserAvatar } from "@/components/ui/user-avatar"
 import { useAuth } from "@/hooks/useAuth"
+import { useCurrency } from "@/hooks/useCurrency"
 import config from "@/config/site"
 
 // Equipment data for search suggestions
@@ -44,6 +45,7 @@ export default function MinimalHeader() {
   const [showMobileSearch, setShowMobileSearch] = useState(false)
   const [showProfileDropdown, setShowProfileDropdown] = useState(false)
   const { user, isLoggedIn, logout } = useAuth()
+  const { currency, toggleCurrency } = useCurrency()
 
   const handleSearch = (query: string) => {
     setSearchQuery(query)
@@ -94,6 +96,17 @@ export default function MinimalHeader() {
 
         {/* Right: Actions */}
         <div className="flex items-center gap-2">
+          {/* Currency toggle */}
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="gap-2 hidden sm:flex"
+            onClick={toggleCurrency}
+            title={`Switch currency (current: ${currency})`}
+          >
+            <DollarSign className="h-4 w-4" />
+            {currency}
+          </Button>
           {/* Mobile search button */}
           <Button 
             variant="ghost" 
@@ -139,21 +152,21 @@ export default function MinimalHeader() {
                     </div>
                   </Link>
                   
-                  <Link href="/profile?tab=orders" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  <Link href={{ pathname: '/profile', query: { tab: 'orders' } }} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                     <div className="flex items-center gap-2">
                       <Package className="w-4 h-4" />
                       My Orders
                     </div>
                   </Link>
                   
-                  <Link href="/profile?tab=wishlist" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  <Link href={{ pathname: '/profile', query: { tab: 'wishlist' } }} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                     <div className="flex items-center gap-2">
                       <Heart className="w-4 h-4" />
                       Wishlist
                     </div>
                   </Link>
                   
-                  <Link href="/profile?tab=settings" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                  <Link href={{ pathname: '/profile', query: { tab: 'settings' } }} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                     <div className="flex items-center gap-2">
                       <Settings className="w-4 h-4" />
                       Settings

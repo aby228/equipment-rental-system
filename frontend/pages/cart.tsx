@@ -20,6 +20,7 @@ import {
   Clock,
   Package
 } from 'lucide-react'
+import { useCurrency } from '@/hooks/useCurrency'
 
 interface CartItem {
   id: string
@@ -207,6 +208,7 @@ export default function CartPage() {
   const router = useRouter()
   const [cartItems, setCartItems] = useState<CartItem[]>([])
   const [isUpdating, setIsUpdating] = useState(false)
+  const { formatCurrency } = useCurrency()
 
   useEffect(() => {
     const savedCart = JSON.parse(localStorage.getItem('cart') || '[]')
@@ -298,12 +300,7 @@ export default function CartPage() {
     return calculateSubtotal() + calculateTax()
   }
 
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(amount)
-  }
+  // Using currency context's formatCurrency
 
   if (cartItems.length === 0) {
     return (

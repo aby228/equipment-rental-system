@@ -10,6 +10,7 @@ import { EquipmentWithIncludes } from '@/types/equipment'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Clock } from 'lucide-react'
+import { useCurrency } from '@/hooks/useCurrency'
 
 export const ProductGrid = ({
    products,
@@ -36,6 +37,7 @@ export const ProductSkeletonGrid = () => {
 }
 
 export const Product = ({ product }: { product: EquipmentWithIncludes }) => {
+   const { formatCurrency } = useCurrency()
    function Price() {
       // Convert daily rate to hourly rate (assuming 8-hour work day)
       const hourlyRate = Number(product?.dailyRate) / 8
@@ -45,7 +47,7 @@ export const Product = ({ product }: { product: EquipmentWithIncludes }) => {
             <div className="flex items-center gap-1">
                <Clock className="w-4 h-4 text-gray-500" />
                <span className="text-lg font-bold">
-                  ${hourlyRate.toFixed(2)}
+                  {formatCurrency(hourlyRate)}
                </span>
                <span className="text-sm text-muted-foreground">/hr</span>
             </div>

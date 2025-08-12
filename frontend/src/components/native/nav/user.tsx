@@ -67,13 +67,13 @@ export function UserNav({ user }: UserNavProps) {
                      My Profile
                   </DropdownMenuItem>
                </Link>
-               <Link href="/profile">
+               <Link href={{ pathname: '/profile', query: { tab: 'orders' } }}>
                   <DropdownMenuItem className="flex gap-2">
                      <ListOrderedIcon className="h-4" />
                      My Orders
                   </DropdownMenuItem>
                </Link>
-               <Link href="/wishlist">
+               <Link href={{ pathname: '/profile', query: { tab: 'wishlist' } }}>
                   <DropdownMenuItem className="flex gap-2">
                      <HeartIcon className="h-4" />
                      Wishlist
@@ -86,7 +86,7 @@ export function UserNav({ user }: UserNavProps) {
                   </DropdownMenuItem>
                </Link>
                <DropdownMenuSeparator />
-               <Link href="/profile">
+               <Link href={{ pathname: '/profile', query: { tab: 'settings' } }}>
                   <DropdownMenuItem className="flex gap-2">
                      <Settings className="h-4" />
                      Settings

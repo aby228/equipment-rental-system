@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { CheckCircle, ShoppingCart, X, ArrowRight } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useCurrency } from '@/hooks/useCurrency'
 
 interface AddToCartModalProps {
   isOpen: boolean
@@ -20,6 +21,7 @@ interface AddToCartModalProps {
 
 export function AddToCartModal({ isOpen, onClose, product }: AddToCartModalProps) {
   const [isVisible, setIsVisible] = useState(false)
+  const { formatCurrency } = useCurrency()
 
   useEffect(() => {
     if (isOpen) {
@@ -91,7 +93,7 @@ export function AddToCartModal({ isOpen, onClose, product }: AddToCartModalProps
                     {product.name}
                   </h4>
                   <p className="text-2xl font-display font-bold text-blue-600">
-                    ${product.price.toFixed(2)}/hour
+                    {formatCurrency(product.price)}/hour
                   </p>
                 </div>
               </div>

@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useRef, useMemo } from 'react'
+import { useState, useRef, useMemo, useEffect } from 'react'
+import { useRouter } from 'next/router'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -50,12 +51,22 @@ interface Order {
 }
 
 export default function ProfilePage() {
+  const router = useRouter()
   const [activeTab, setActiveTab] = useState('profile')
   const [isEditing, setIsEditing] = useState(false)
   const [editForm, setEditForm] = useState<UserProfile | null>(null)
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { user: authUser, logout, isLoggedIn } = useAuth()
+
+  // Sync tab with URL (e.g. /profile?tab=orders)
+  useEffect(() => {
+    const queryTab = typeof router.query?.tab === 'string' ? router.query.tab : undefined
+    if (queryTab && queryTab !== activeTab) {
+      setActiveTab(queryTab)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router.query?.tab])
 
   // Use authenticated user data (with safe fallbacks)
   const user: UserProfile = useMemo(() => ({
@@ -259,8 +270,16 @@ export default function ProfilePage() {
 
           {/* Main Content */}
           <div className="lg:col-span-3">
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-4 bg-white shadow-sm">
+            <Tabs
+              value={activeTab}
+              onValueChange={(val) => {
+                setActiveTab(val)
+                const url = { pathname: '/profile', query: val === 'profile' ? {} : { tab: val } }
+                router.push(url as any, undefined, { shallow: true })
+              }}
+              className="space-y-6"
+            >
+              <TabsList className="grid w-full grid-cols-4 bg-white shadow-sm sticky top-0 z-10">
                 <TabsTrigger value="profile" className="flex items-center gap-2">
                   <User className="w-4 h-4" />
                   Profile
@@ -280,8 +299,8 @@ export default function ProfilePage() {
               </TabsList>
 
               <TabsContent value="profile" className="space-y-6">
-                <Card className="shadow-sm">
-                  <CardHeader className="border-b bg-gray-50/50">
+                <Card className="shadow-sm border-t">
+                  <CardHeader className="border-b bg-gray-50/80 backdrop-blur supports-[backdrop-filter]:bg-gray-50/60">
                     <div className="flex items-center justify-between">
                       <CardTitle className="flex items-center gap-2">
                         <User className="w-5 h-5 text-gray-600" />

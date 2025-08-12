@@ -8,6 +8,7 @@ import { Heart, ShoppingCart, Clock, Plus } from 'lucide-react'
 import { AddToCartModal } from '@/components/ui/add-to-cart-modal'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useCurrency } from '@/hooks/useCurrency'
 
 interface Product {
   id: string
@@ -33,6 +34,7 @@ interface ProductGridProps {
 }
 
 export default function ProductGrid({ products, title, description, showFilters = false }: ProductGridProps) {
+  const { formatCurrency } = useCurrency()
   const [wishlist, setWishlist] = useState<string[]>([])
   const [cart, setCart] = useState<string[]>([])
   const [showModal, setShowModal] = useState(false)
@@ -123,13 +125,13 @@ export default function ProductGrid({ products, title, description, showFilters 
                   <div className="flex items-center gap-2">
                     <Clock className="w-5 h-5 text-gray-500" />
                     <span className="text-xl font-display font-bold text-gray-900">
-                      ${product.price.toFixed(2)}
+                      {formatCurrency(product.price)}
                     </span>
                     <span className="text-sm text-gray-500 font-medium">/hr</span>
                   </div>
                   {product.originalPrice && (
                     <span className="text-sm text-gray-400 line-through font-medium">
-                      ${product.originalPrice.toFixed(2)}/hr
+                      {formatCurrency(product.originalPrice)}/hr
                     </span>
                   )}
                 </div>
