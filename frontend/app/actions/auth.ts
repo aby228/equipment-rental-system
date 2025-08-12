@@ -1,5 +1,5 @@
 // new-rentals/frontend/app/actions/auth.ts
-import api from '@/lib/api';
+import api from '@/lib/api-express';
 import { cookies } from 'next/headers';
 
 export async function login(email: string, password: string) {

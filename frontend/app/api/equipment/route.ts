@@ -1,6 +1,6 @@
 // new-rentals/frontend/app/api/equipment/route.ts
 import { NextResponse } from 'next/server';
-import api from '@/lib/api';
+import api from '@/lib/api-express';
 
 export async function GET() {
   try {
