@@ -50,6 +50,19 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 /**
+ * Request Logging Middleware
+ * 
+ * Logs all incoming requests with timestamp, method, URL, and IP address.
+ * This helps with debugging and monitoring API usage.
+ */
+app.use((req, res, next) => {
+  const timestamp = new Date().toISOString();
+  const ip = req.ip || req.connection.remoteAddress;
+  console.log(`📡 ${req.method} ${req.url} - ${ip} - ${timestamp}`);
+  next();
+});
+
+/**
  * In-Memory Data Storage
  * 
  * Note: This is a development implementation. For production deployment,
@@ -377,8 +390,16 @@ app.post('/auth/register', async (req, res) => {
   try {
     const { email, password, fullName, phone } = req.body;
     
+    console.log(`📝 Registration attempt for: ${email} at ${new Date().toISOString()}`);
+    
+    if (!email || !password || !fullName || !phone) {
+      console.log(`❌ Registration failed - Missing fields for: ${email}`);
+      return res.status(400).json({ error: 'All fields are required' });
+    }
+    
     // Check if user already exists
     if (users.find(user => user.email === email)) {
+      console.log(`❌ Registration failed - User already exists: ${email}`);
       return res.status(400).json({ error: 'User already exists' });
     }
     
@@ -401,12 +422,54 @@ app.post('/auth/register', async (req, res) => {
     // Generate token
     const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET);
     
+    console.log(`✅ Registration successful - User: ${fullName} (${email})`);
+    console.log(`   User ID: ${user.id}`);
+    console.log(`   Registration time: ${new Date().toISOString()}`);
+    
     res.json({ 
       success: true, 
       user: { id: user.id, email: user.email, fullName: user.fullName },
       token 
     });
   } catch (error) {
+    console.error(`💥 Registration error for ${req.body.email}:`, error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * Get All Users (Admin Endpoint)
+ * 
+ * Returns a list of all registered users (without sensitive data like passwords).
+ * This endpoint is useful for admin monitoring and user management.
+ * 
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * 
+ * @returns {Object} JSON array of user objects (excluding passwords)
+ */
+app.get('/admin/users', (req, res) => {
+  try {
+    console.log(`👥 Admin request - Fetching all users at ${new Date().toISOString()}`);
+    
+    const safeUsers = users.map(user => ({
+      id: user.id,
+      email: user.email,
+      fullName: user.fullName,
+      phone: user.phone,
+      role: user.role,
+      createdAt: user.createdAt
+    }));
+    
+    console.log(`📊 Found ${safeUsers.length} users in the system`);
+    
+    res.json({
+      success: true,
+      count: safeUsers.length,
+      users: safeUsers
+    });
+  } catch (error) {
+    console.error('💥 Error fetching users:', error.message);
     res.status(500).json({ error: error.message });
   }
 });
@@ -415,20 +478,28 @@ app.post('/auth/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     
+    console.log(`🔐 Login attempt for email: ${email} at ${new Date().toISOString()}`);
+    
     // Find user
     const user = users.find(user => user.email === email);
     if (!user) {
+      console.log(`❌ Login failed - User not found: ${email}`);
       return res.status(400).json({ error: 'Invalid credentials' });
     }
     
     // Check password
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
+      console.log(`❌ Login failed - Invalid password for: ${email}`);
       return res.status(400).json({ error: 'Invalid credentials' });
     }
     
     // Generate token
     const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET);
+    
+    console.log(`✅ Login successful - User: ${user.fullName} (${email})`);
+    console.log(`   User ID: ${user.id}`);
+    console.log(`   Login time: ${new Date().toISOString()}`);
     
     res.json({ 
       success: true, 
@@ -436,6 +507,7 @@ app.post('/auth/login', async (req, res) => {
       token 
     });
   } catch (error) {
+    console.error(`💥 Login error for ${req.body.email}:`, error.message);
     res.status(500).json({ error: error.message });
   }
 });
@@ -460,6 +532,9 @@ app.get('/', (req, res) => {
       auth: {
         register: 'POST /auth/register',
         login: 'POST /auth/login'
+      },
+      admin: {
+        users: 'GET /admin/users'
       },
       equipment: {
         list: 'GET /equipment',
