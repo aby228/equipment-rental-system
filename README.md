@@ -3,8 +3,8 @@
 A full-stack construction equipment rental platform built with modern web technologies. Features real-time inventory management, secure authentication, and responsive design.
 
 ## 🚀 Live Demo
-- **Frontend**: [edustech-enterprise.vercel.app](https://edustech-enterprise.vercel.app)
-- **Backend API**: [equipment-rental-system.onrender.com](https://equipment-rental-system.onrender.com)
+- [Frontend](https://edustech-enterprise.vercel.app)
+- [Backend API](https://equipment-rental-system.onrender.com)
 
 ## 🛠️ Tech Stack
 
