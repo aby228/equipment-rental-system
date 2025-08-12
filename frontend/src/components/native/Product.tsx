@@ -6,7 +6,7 @@ import {
   CardFooter,
   CardHeader,
 } from '@/components/ui/card'
-import { EquipmentWithIncludes } from '@/types/prisma'
+import { EquipmentWithIncludes } from '@/types/equipment'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Clock } from 'lucide-react'

@@ -6,92 +6,74 @@ declare global {
   }
 }
 
-// Prisma types
+// Equipment types
 export interface Equipment {
-  id: number;
+  id: string;
   name: string;
-  description: string | null;
-  quantity: number;
-  dailyRate: number;
-}
-
-export interface Customer {
-  id: number;
-  name: string;
-  email: string;
-  phone: string | null;
-  role: string;
-}
-
-export interface Rental {
-  id: number;
-  customerId: number;
-  equipmentId: number;
-  rentalDate: Date;
-  returnDate: Date | null;
-  quantity: number;
-  customer: Customer;
-  equipment: Equipment;
-}
-
-export interface Order {
-  id: number;
-  customerId: number;
-  orderDate: Date;
-  customer: Customer;
-  orderItems: OrderItem[];
-}
-
-export interface OrderItem {
-  id: number;
-  orderId: number;
-  equipmentId: number;
-  quantity: number;
-  dailyRate: number;
-  equipment: Equipment;
-}
-
-// Blog types
-export interface BlogPost {
-  slug: string;
-  title: string;
   description: string;
+  category: string;
   image: string;
-  createdAt: Date;
-  author?: {
-    name: string;
-  };
-}
-
-// API Response types
-export interface ApiResponse<T = any> {
-  status: 'success' | 'fail' | 'error';
-  message: string;
-  data?: T;
-  errors?: any;
+  price: number;
+  hourlyRate: number;
+  dailyRate: number;
+  weeklyRate: number;
+  monthlyRate: number;
+  availability: boolean;
+  condition: string;
+  location: string;
+  specifications: Record<string, any>;
 }
 
 // User types
 export interface User {
-  id: number;
+  id: string;
   name: string;
   email: string;
   phone?: string;
-  role: string;
+  avatar?: string;
+  joinDate: string;
+}
+
+// Order types
+export interface Order {
+  id: string;
+  userId: string;
+  items: OrderItem[];
+  total: number;
+  status: 'pending' | 'processing' | 'completed' | 'cancelled';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface OrderItem {
+  id: string;
+  equipmentId: string;
+  equipment: Equipment;
+  quantity: number;
+  hours: number;
+  price: number;
 }
 
 // Cart types
 export interface CartItem {
-  id: number;
-  name: string;
-  price: number;
+  id: string;
+  equipment: Equipment;
   quantity: number;
-  image?: string;
+  hours: number;
+  price: number;
 }
 
 export interface Cart {
   items: CartItem[];
   total: number;
+}
+
+// API Response types
+export interface ApiResponse<T = any> {
+  success: boolean;
+  data?: T;
+  error?: string;
+  message?: string;
 }
 
 export {} 

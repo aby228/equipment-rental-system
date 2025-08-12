@@ -1,6 +1,6 @@
 {
    "name": "equipment-rental-frontend",
-   "description": "Modern Next.js frontend for equipment rental platform with TypeScript, Tailwind CSS, Prisma ORM, and comprehensive user interface for equipment management and rental processing.",
+   "description": "Modern Next.js frontend for equipment rental platform with TypeScript, Tailwind CSS, and comprehensive user interface for equipment management and rental processing.",
    "author": {
       "name": "EDUSTECH Enterprise",
       "email": "youngeabraham89@gmail.com",
@@ -12,19 +12,10 @@
       "build": "next build",
       "start": "next start",
       "lint": "next lint",
-      "postinstall": "prisma generate",
-      "update": "npx npm-check-updates -u",
-      "db:generate": "npx prisma generate",
-      "db:format": "npx prisma format",
-      "db:reset": "npx prisma db push --force-reset",
-      "db:push": "npx prisma db push",
-      "db:seed": "npx prisma db seed",
-      "db:studio": "npx prisma studio",
-      "vercel-build": "prisma generate && next build"
+      "update": "npx npm-check-updates -u"
    },
    "dependencies": {
       "@hookform/resolvers": "^3.9.0",
-      "@prisma/client": "6.12.0",
       "@radix-ui/react-accordion": "^1.2.1",
       "@radix-ui/react-alert-dialog": "^1.1.2",
       "@radix-ui/react-avatar": "^1.1.1",
@@ -79,7 +70,6 @@
       "postcss": "^8.4.47",
       "prettier": "^3.3.3",
       "prettier-plugin-tailwindcss": "^0.6.8",
-      "prisma": "6.12.0",
       "tailwind-merge": "^2.5.3",
       "tailwindcss": "^3.4.13",
       "tailwindcss-animate": "^1.0.7",

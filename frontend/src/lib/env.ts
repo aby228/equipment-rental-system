@@ -4,7 +4,6 @@
  */
 
 const requiredEnvVars = {
-  DATABASE_URL: process.env.DATABASE_URL,
   JWT_SECRET_KEY: process.env.JWT_SECRET_KEY,
   NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
@@ -51,11 +50,6 @@ export const isProduction = process.env.NODE_ENV === 'production';
  * Check if running in development
  */
 export const isDevelopment = process.env.NODE_ENV === 'development';
-
-/**
- * Database URL for Prisma
- */
-export const DATABASE_URL = getEnv('DATABASE_URL');
 
 /**
  * JWT Secret for authentication

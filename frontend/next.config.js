@@ -19,12 +19,6 @@ const nextConfig = {
     //         },
     //     ]
     // },
-    // Enable experimental features for better performance
-    experimental: {
-        serverComponentsExternalPackages: ['@prisma/client'],
-    },
-    // Ensure proper output for Vercel
-    // output: 'standalone',
 }
 
 module.exports = nextConfig
