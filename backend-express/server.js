@@ -29,7 +29,24 @@ const PORT = process.env.PORT || 3001;
  * - CORS: Enables cross-origin resource sharing for frontend integration
  * - JSON Parser: Parses incoming JSON payloads in request bodies
  */
-app.use(cors());
+/**
+ * CORS Configuration
+ * 
+ * Configured to allow requests from both development and production frontend domains.
+ * In production, this should be restricted to your actual frontend domain for security.
+ */
+const corsOptions = {
+  origin: [
+    'http://localhost:7777', // Development frontend
+    'https://edustech-enterprise-yzrfi9xgp-youngeabraham49-5813s-projects.vercel.app', // Your Vercel domain
+    'https://edustech-enterprise.vercel.app', // If you have a custom domain
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 /**

@@ -15,6 +15,13 @@
  * @version 1.0.0
  */
 
+/**
+ * API Base URL Configuration
+ * 
+ * Determines the backend API URL based on environment:
+ * - Development: http://localhost:3001
+ * - Production: https://your-backend-app-name.onrender.com
+ */
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 /**
