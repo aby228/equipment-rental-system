@@ -441,6 +441,50 @@ app.post('/auth/login', async (req, res) => {
 });
 
 /**
+ * Root Route - API Information
+ * 
+ * Provides information about the API and available endpoints.
+ * This is the default route that users see when visiting the API URL directly.
+ * 
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ * 
+ * @returns {Object} JSON object containing API information and available endpoints
+ */
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Welcome to EDUSTECH Equipment Rental API',
+    version: '1.0.0',
+    description: 'RESTful API for construction equipment rental platform',
+    endpoints: {
+      auth: {
+        register: 'POST /auth/register',
+        login: 'POST /auth/login'
+      },
+      equipment: {
+        list: 'GET /equipment',
+        detail: 'GET /equipment/:id'
+      },
+      cart: {
+        get: 'GET /cart',
+        add: 'POST /cart',
+        update: 'PUT /cart/:equipmentId',
+        remove: 'DELETE /cart/:equipmentId'
+      },
+      orders: {
+        list: 'GET /orders',
+        create: 'POST /orders'
+      },
+      system: {
+        health: 'GET /health'
+      }
+    },
+    documentation: 'See README.md for detailed API documentation',
+    timestamp: new Date().toISOString()
+  });
+});
+
+/**
  * System Health Check Route
  * 
  * Provides system status information for monitoring and debugging purposes.
